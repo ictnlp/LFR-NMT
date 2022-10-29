@@ -1,0 +1,58 @@
+af	__af_ZA__	afr
+ar	__ar_AR__	ara
+az	__az_AZ__	azj
+bn	__bn_IN__	ben
+cs	__cs_CZ__	ces
+de	__de_DE__	deu
+es	__es_XX__	spa
+et	__et_EE__	est
+fa	__fa_IR__	fas
+fi	__fi_FI__	fin
+fr	__fr_XX__	fra
+gl	__gl_ES__	glg
+gu	__gu_IN__	guj
+he	__he_IL__	heb
+hi	__hi_IN__	hin
+hr	__hr_HR__	hrv
+id	__id_ID__	ind
+it	__it_IT__	ita
+ja	__ja_XX__	jpn
+ka	__ka_GE__	kat
+kk	__kk_KZ__	kaz
+km	__km_KH__	khm
+ko	__ko_KR__	kor
+lt	__lt_LT__	lit
+lv	__lv_LV__	lav
+mk	__mk_MK__	mkd
+ml	__ml_IN__	mal
+mn	__mn_MN__	mon
+mr	__mr_IN__	mar
+my	__my_MM__	mya
+ne	__ne_NP__	npi
+nl	__nl_XX__	nld
+pl	__pl_PL__	pol
+ps	__ps_AF__	pus
+pt	__pt_XX__	por
+ro	__ro_RO__	ron
+ru	__ru_RU__	rus	
+sl	__sl_SI__	slv
+sv	__sv_SE__	swe
+ta	__ta_IN__	tam
+te	__te_IN__	tel
+th	__th_TH__	tha
+tr	__tr_TR__	tur
+uk	__uk_UA__	ukr
+ur	__ur_PK__	urd
+vi	__vi_VN__	vie
+xh	__xh_ZA__	xho
+zh	__zh_CN__	zho
+en	__en_XX__	eng
+el	__el_EL__	ell
+sk 	__sk_SK__	slk
+
+si	__si_LK__
+
+
+uz Uzbeke-
+hu Hungarian
+is Icelandic

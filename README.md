@@ -37,4 +37,11 @@ pip install --editable ./
 + Mulilingual data: https://opus.nlpl.eu/opus-100.php
 
 
-Still working on this ...
+### Training
+We take the domain adaptation task as an example to show how to use the two methods.
+
+**Curvature-based Method** 
+
+First, we need to use the flroes dev data to computer the emprical fisher information matrix:
+
+

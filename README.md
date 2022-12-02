@@ -13,9 +13,9 @@ To achieve this, we propose a two-stage training method.
 
 This code is based on the open source toolkit [fairseq-py](https://github.com/facebookresearch/fairseq).
 
-All the core codes of our method are put in the folders "./k_d" and "./lfr".
+All the core codes of our method are put in the folders "./par_range" and "./lfr".
 
-Codes in "./k_d" are mainly related to the fisrt stage training, which searches the LFR regions.
+Codes in "./par_range" are mainly related to the fisrt stage training, which searches the LFR regions.
 
 Codes in "./lfr" are mainly related to the second stage training.
 
@@ -44,4 +44,48 @@ We take the domain adaptation task as an example to show how to use the two meth
 
 First, we need to use the flroes dev data to computer the emprical fisher information matrix:
 
+```
+# pretrained mBART model
+ckt=
+CUDA_VISIBLE_DEVICES=0  ${env_path}/python  par_range/fisher_information.py data_bin/flores_mbart50spm_en --reset-optimizer  --restore-file $ckt \
+```
 
+Then, train the model within the LFR regions:
+
+```
+TOOL=lfr/train_control.py
+DATA=data_bin/ende_5domain/data_bin_combine_de_DE_en_XX
+ckt=
+${env_path}/python  $TOOL \
+    $DATA --fp16 --ddp-backend=legacy_ddp \
+    --reset-optimizer --reset-dataloader --reset-meters \
+    --user-dir lfr \
+    --control-type 'curvature'  --seed 9527   \
+    --par-fixed-ratio 0.75 --par-change-range 0.2  \
+    --freeze-specific-module \
+    --restore-file $ckt \
+    --through-adapter 'none' \
+    --fim-path par_range/fim.pt \
+    --encoder-attention-heads 16 --decoder-attention-heads 16 \
+    --layernorm-embedding \
+    --encoder-learned-pos --decoder-learned-pos \
+    --dataset-impl mmap  \
+    --arch transformer_big_adapter \
+    --dropout 0.3 --attention-dropout 0.1 \
+    --encoder-layers 12 --decoder-layers 12 \
+    --encoder-normalize-before --decoder-normalize-before \
+    --share-all-embeddings \
+    --save-dir ${data_path}/checkpoints/$dir \
+    --task translation_multi_simple_epoch_with_adapter \
+    --encoder-langtok "src" --decoder-langtok \
+    --lang-pairs $lang_pairs \
+    --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
+    --optimizer adam --adam-eps 1e-06 --adam-betas '(0.9, 0.98)' \
+    --lr-scheduler inverse_sqrt --lr 5e-4 --warmup-init-lr 1e-07 --warmup-updates 4000 \
+    --max-tokens 1024  --update-freq 2 --max-epoch 30 --max-update 30000 \
+    --save-interval 1 --disable-validation   --no-epoch-checkpoints \
+    --save-interval-updates 2000 --keep-interval-updates 10 \
+    --no-progress-bar --log-format json --log-interval 25 2>&1 | tee ${data_path}/out_log/out.$dir
+```
+
+To be continued ...

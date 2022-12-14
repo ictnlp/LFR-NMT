@@ -170,7 +170,7 @@ def main(cfg: FairseqConfig) -> None:
     train_meter.start()
 
     fisher_matrix = fisher(cfg, trainer, task, epoch_itr)
-    fisher_save = open('/apdcephfs/share_1157273/users/gushuhao/1_reasearch/fairseq-flores/checkpoints/baseline_model/taylor.pt', 'wb')
+    fisher_save = open('fim.pt', 'wb')
     torch.save(fisher_matrix, fisher_save)
     logger.info("EWC computation done!")
 
@@ -247,9 +247,7 @@ def fisher(cfg, trainer, task, epoch_itr):
                 if p._grad is not None:
                     if n in fisher_matrix.keys():
                         # ewc
-                        #tmp = p._grad.data.detach().double()**2 / sample_size
-                        # taylor
-                        tmp = (p._grad.data.detach().double() * p.data.detach()).abs() / sample_size
+                        tmp = p._grad.data.detach().double()**2 / sample_size
                         if torch.isinf(tmp).any():
                             print(step, 'inf', n)
                             continue
@@ -261,9 +259,7 @@ def fisher(cfg, trainer, task, epoch_itr):
                         fisher_matrix[n] = fisher_matrix[n] * (step/(step+1)) + tmp.cpu()/(step+1)
                     else:
                         # ewc 
-                        #tmp = p._grad.data.detach().double()**2 / sample_size
-                        # taylor
-                        tmp = (p._grad.data.detach().double() * p.data.detach()).abs() / sample_size
+                        tmp = p._grad.data.detach().double()**2 / sample_size
                         if torch.isinf(tmp).any():
                             print(step, 'inf', n)
                             continue
@@ -273,7 +269,7 @@ def fisher(cfg, trainer, task, epoch_itr):
                         fisher_matrix[n] = tmp.cpu()
             step += 1
             if step % 100 == 0:
-                fisher_save = open('/apdcephfs/share_1157273/users/gushuhao/1_reasearch/fairseq-flores/checkpoints/baseline_model/taylor.pt', 'wb')
+                fisher_save = open('fim.pt', 'wb')
                 torch.save(fisher_matrix, fisher_save)
                 #if j % 10 == 0:
                 #    print('j', j)

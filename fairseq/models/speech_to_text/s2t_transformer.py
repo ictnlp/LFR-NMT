@@ -202,10 +202,10 @@ class S2TTransformerModel(FairseqEncoderDecoderModel):
             help="model to take encoder weights from (for initialization)",
         )
         parser.add_argument(
-            '--encoder-freezing-updates',
+            "--encoder-freezing-updates",
             type=int,
-            metavar='N',
-            help='freeze encoder for first N updates'
+            metavar="N",
+            help="freeze encoder for first N updates",
         )
 
     @classmethod
@@ -308,7 +308,7 @@ class S2TTransformerEncoder(FairseqEncoder):
         else:
             self.layer_norm = None
 
-    def _forward(self, src_tokens, src_lengths):
+    def _forward(self, src_tokens, src_lengths, return_all_hiddens=False):
         x, input_lengths = self.subsample(src_tokens, src_lengths)
         x = self.embed_scale * x
 
@@ -317,43 +317,61 @@ class S2TTransformerEncoder(FairseqEncoder):
         x += positions
         x = self.dropout_module(x)
 
+        encoder_states = []
+
         for layer in self.transformer_layers:
             x = layer(x, encoder_padding_mask)
+            if return_all_hiddens:
+                encoder_states.append(x)
 
         if self.layer_norm is not None:
             x = self.layer_norm(x)
 
         return {
             "encoder_out": [x],  # T x B x C
-            "encoder_padding_mask": [encoder_padding_mask] if encoder_padding_mask.any() else [],  # B x T
+            "encoder_padding_mask": [encoder_padding_mask]
+            if encoder_padding_mask.any()
+            else [],  # B x T
             "encoder_embedding": [],  # B x T x C
-            "encoder_states": [],  # List[T x B x C]
+            "encoder_states": encoder_states,  # List[T x B x C]
             "src_tokens": [],
             "src_lengths": [],
         }
 
-    def forward(self, src_tokens, src_lengths):
+    def forward(self, src_tokens, src_lengths, return_all_hiddens=False):
         if self.num_updates < self.encoder_freezing_updates:
             with torch.no_grad():
-                x = self._forward(src_tokens, src_lengths)
+                x = self._forward(
+                    src_tokens, src_lengths, return_all_hiddens=return_all_hiddens
+                )
         else:
-            x = self._forward(src_tokens, src_lengths)
+            x = self._forward(
+                src_tokens, src_lengths, return_all_hiddens=return_all_hiddens
+            )
         return x
 
     def reorder_encoder_out(self, encoder_out, new_order):
         new_encoder_out = (
-            [] if len(encoder_out["encoder_out"]) == 0
+            []
+            if len(encoder_out["encoder_out"]) == 0
             else [x.index_select(1, new_order) for x in encoder_out["encoder_out"]]
         )
 
         new_encoder_padding_mask = (
-            [] if len(encoder_out["encoder_padding_mask"]) == 0
-            else [x.index_select(0, new_order) for x in encoder_out["encoder_padding_mask"]]
+            []
+            if len(encoder_out["encoder_padding_mask"]) == 0
+            else [
+                x.index_select(0, new_order)
+                for x in encoder_out["encoder_padding_mask"]
+            ]
         )
 
         new_encoder_embedding = (
-            [] if len(encoder_out["encoder_embedding"]) == 0
-            else [x.index_select(0, new_order) for x in encoder_out["encoder_embedding"]]
+            []
+            if len(encoder_out["encoder_embedding"]) == 0
+            else [
+                x.index_select(0, new_order) for x in encoder_out["encoder_embedding"]
+            ]
         )
 
         encoder_states = encoder_out["encoder_states"]

@@ -62,6 +62,7 @@ First, we need to use the flroes dev data to computer the emprical fisher inform
 ckt=
 CUDA_VISIBLE_DEVICES=0  python  par_range/fisher_information.py data_bin/flores_mbart50spm_en --reset-optimizer  --restore-file $ckt 
 ```
+You can also download our FIM [here](https://drive.google.com/file/d/1s27102k-2c40y74QizfUVrupU5feuMSy/view?usp=share_link).
 
 Then, train the model within the LFR regions:
 

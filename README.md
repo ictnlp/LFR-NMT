@@ -32,20 +32,22 @@ pip install --editable ./
 ```
 
 ### Pre-trained Model & Data
-mBART50-nn is a many-to-many multilingual translation model released by Meta AI. 
-
-+ mBART50-nn: https://github.com/facebookresearch/fairseq/tree/main/examples/multilingual#mbart50-models
-
-Based on mBart50-nn, we insert a new language-specific embedding (LSE) layer for the new languages, El and Sk, and fine-tune these parameters with the new training data for 20k steps. The original parameters are kept fixed during training. We use this model as the pre-trained model for the language adaptation task.
-
-+ mBART50-nn+LSE: https://drive.google.com/file/d/15EpWap5Jv1X_FvJ_TBkFQVmvjw2xT-tv/view?usp=sharing
-
 The raw training data:
 + Multi-domain data: https://github.com/roeeaharoni/unsupervised-domain-clusters
 + Mulilingual data: https://opus.nlpl.eu/opus-100.php
 
 We aslo release the data processed by fairseq that can be used directly with the following scripts:
 + data_bin: https://drive.google.com/file/d/1M9r3_8ujzDkFqjUCdRWmpSrzoR7RLB1D/view?usp=sharing
+
+mBART50-nn is a many-to-many multilingual translation model released by Meta AI. 
+
++ mBART50-nn: https://drive.google.com/file/d/1k8tJey-9SlGD9EEUbmqeezVk1bzu9lgh/view?usp=share_link
+
+Based on mBart50-nn, we insert a new language-specific embedding (LSE) layer for the new languages, El and Sk, and fine-tune these parameters with the new training data for 20k steps. The original parameters are kept fixed during training. We use this model as the pre-trained model for the language adaptation task.
+
++ mBART50-nn+LSE: https://drive.google.com/file/d/15EpWap5Jv1X_FvJ_TBkFQVmvjw2xT-tv/view?usp=sharing
+
+
 
 
 ### Training

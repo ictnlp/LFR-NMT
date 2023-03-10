@@ -103,7 +103,7 @@ python  $TOOL \
     --freeze-specific-module \
     --restore-file $ckt \
     --through-adapter 'none' \
-    --fim-path par_range/fim.pt \
+    --fim-path fim.pt \
     --encoder-attention-heads 16 --decoder-attention-heads 16 \
     --layernorm-embedding \
     --encoder-learned-pos --decoder-learned-pos \

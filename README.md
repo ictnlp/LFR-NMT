@@ -60,7 +60,10 @@ First, we need to use the flroes dev data to computer the emprical fisher inform
 ```
 # pretrained mBART model
 ckt=
-CUDA_VISIBLE_DEVICES=0  python  par_range/fisher_information.py data_bin/flores_mbart50spm_en --reset-optimizer  --restore-file $ckt 
+lang_pairs=${data_path}/par_range/lang_pairs.txt
+
+CUDA_VISIBLE_DEVICES=0  python  par_range/fisher_information.py data_bin/flores_mbart50spm_en \
+       --reset-optimizer  --restore-file $ckt 
 ```
 You can also download our FIM [here](https://drive.google.com/file/d/1s27102k-2c40y74QizfUVrupU5feuMSy/view?usp=share_link).
 

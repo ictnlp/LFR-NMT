@@ -55,7 +55,7 @@ We take the domain adaptation task as an example to show how to use the two meth
 
 **Curvature-based Method** 
 
-First, we need to use the flroes dev data to computer the emprical fisher information matrix:
+First, we need to use the flroes dev data to compute the emprical fisher information matrix:
 
 ```
 # pretrained mBART model

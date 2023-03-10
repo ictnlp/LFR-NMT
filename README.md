@@ -60,10 +60,27 @@ First, we need to use the flroes dev data to computer the emprical fisher inform
 ```
 # pretrained mBART model
 ckt=
-lang_pairs=${data_path}/par_range/lang_pairs.txt
+lang_pairs=par_range/lang_pairs.txt
 
 CUDA_VISIBLE_DEVICES=0  python  par_range/fisher_information.py data_bin/flores_mbart50spm_en \
-       --reset-optimizer  --restore-file $ckt 
+       --reset-optimizer  --restore-file $ckt --fp16 \
+       --encoder-attention-heads 16 --decoder-attention-heads 16 \
+       --layernorm-embedding \
+       --encoder-learned-pos --decoder-learned-pos \
+       --dataset-impl mmap  \
+       --arch transformer_vaswani_wmt_en_de_big \
+       --dropout 0.0 --attention-dropout 0.0 \
+       --encoder-layers 12 --decoder-layers 12 \
+       --encoder-normalize-before --decoder-normalize-before \
+       --share-all-embeddings \
+       --save-dir checkpoints \
+       --task translation_multi_simple_epoch \
+       --encoder-langtok "src" --decoder-langtok \
+       --lang-pairs $lang_pairs \
+       --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
+       --optimizer adam --adam-eps 1e-06 --adam-betas '(0.9, 0.98)' \
+       --lr-scheduler inverse_sqrt --lr 5e-4 --warmup-init-lr 1e-07 --warmup-updates 4000 \
+       --max-tokens 4096  --update-freq 1 --max-epoch 1 --max-update 50000 \
 ```
 You can also download our FIM [here](https://drive.google.com/file/d/1s27102k-2c40y74QizfUVrupU5feuMSy/view?usp=share_link).
 
@@ -96,7 +113,7 @@ python  $TOOL \
     --encoder-layers 12 --decoder-layers 12 \
     --encoder-normalize-before --decoder-normalize-before \
     --share-all-embeddings \
-    --save-dir ${data_path}/checkpoints/$dir \
+    --save-dir checkpoints/$dir \
     --task translation_multi_simple_epoch_with_adapter \
     --encoder-langtok "src" --decoder-langtok \
     --lang-pairs $lang_pairs \

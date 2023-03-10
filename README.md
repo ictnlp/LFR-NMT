@@ -216,7 +216,11 @@ Taking the IT domain as an example
 ```
 # model file
 ckt=
-CUDA_VISIBLE_DEVICES=0 python fairseq_cli/generate.py data_bin/ende_5domain/data_bin_it_de_DE_en_XX \
+
+# databin of different domains in the folder "data_bin/ende_5domain"
+domain=data_bin_it_de_DE_en_XX
+
+CUDA_VISIBLE_DEVICES=0 python fairseq_cli/generate.py data_bin/ende_5domain/$domain \
 --path $ckt --gen-subset test --beam 5 --batch-size 200 --remove-bpe 'sentencepiece'  \
 --lenpen 1  -s de_DE -t en_XX  --task translation_multi_simple_epoch_with_adapter \
 --lang-pairs data_bin/lang_pairs.txt --decoder-langtok --encoder-langtok src \
